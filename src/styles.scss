@@ -1,19 +1,5 @@
-.page {
-  .upload-container {
-    background-color: red;
-  }
-  .thumbnails {
-
-    &-original {
-
-    }
-
-    &-grayscale {
-
-    }
-  }
-
-  .ascii-result {
-
-  }
+.gh-ribbon {
+  position: fixed;
+  top: 0;
+  right: 0;
 }

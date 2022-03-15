@@ -18,8 +18,8 @@ module.exports = {
         test: /\.scss$/,
         use: [
           {
-              loader: 'file-loader',
-              options: { outputPath: 'styles/', name: '[name].min.css'}
+            loader: 'file-loader',
+            options: { outputPath: 'styles/', name: '[name].css'}
           },
           'sass-loader'
         ]
