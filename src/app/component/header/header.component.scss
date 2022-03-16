@@ -1,0 +1,21 @@
+ascii-header {
+  display: block;
+  width: 100%;
+  height: 50px;
+
+  header {
+    width: 100%;
+    height: 100%;
+    background-color: #853e85;
+    background-image: linear-gradient(#853e85, #a64da6);
+    border-bottom: 2px solid #d9b3d9;
+
+    > span {
+      color: white;
+      padding: 0 5px;
+      line-height: 50px;
+      font-family: 'Courier New', Courier, monospace;
+      cursor: pointer;
+    }
+  }
+}

@@ -1,0 +1,19 @@
+ascii-thumbnail {
+  margin: 8px 0;
+  display: block;
+
+  .container {
+    width: 100%;
+
+    > span {
+      font-weight: 900;
+      font-family: 'Courier New', Courier, monospace;
+      color: #853e85;
+    }
+    
+    > .draw-area {
+      border: 1px solid #d9b3d9;
+      width: 100%;
+    }
+  }
+}

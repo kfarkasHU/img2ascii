@@ -1,0 +1,32 @@
+$operations-width: 20%;
+
+ascii-workspace-layout {
+  display: flex;
+  height: calc(100% - 50px);
+
+  .operations-container {
+    width: $operations-width;
+    background-color: #a64da6;
+    border-right: 2px solid #d9b3d9;
+
+    &-content {
+      margin: 48px 16px;
+      background-color: #e2e2e2;
+      border-radius: 16px;
+      padding: 8px;
+
+      .horizontal-separator {
+        width: 80%;
+      }
+    }
+  }
+
+  .result-container {
+    margin: 8px;
+    padding: 8px;
+    border: 1px solid #d9b3d9;
+    background-color: #e2e2e2;
+    border-radius: 8px;
+    width: calc(100% - $operations-width);
+  }
+}

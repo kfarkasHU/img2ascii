@@ -1,0 +1,78 @@
+import * as ko from "knockout";
+import { ComponentDescriptor } from "../../../../core/component";
+import { ImageProcessor } from "../../../shared/image-processor";
+
+interface ThumbnailComponentInput {
+  label: string,
+  isGrayscale: boolean
+}
+
+class ThumbnailComponent {
+
+  public height = ko.observable<number>();
+  public label = ko.observable<string>("");    
+  public element = ko.observable<HTMLCanvasElement>();
+
+  private context: CanvasRenderingContext2D;
+  private contextSize: { width: number, height: number };
+  private imageProcessor: ImageProcessor = ImageProcessor.getInstance();
+
+  constructor(params: Partial<ThumbnailComponentInput>) {
+    this.label(params.label);
+    this.subscribeToImage(params.isGrayscale);
+    this.element.subscribe(() => this.initializeCanvas());
+  }
+  
+  private subscribeToImage(isGrayscale: boolean) {
+    isGrayscale
+      ? this.subscribeToGrayscale()
+      : this.subscribeToRaw()
+  }
+
+  private subscribeToRaw() {
+    this.imageProcessor.onImageProcessed$.subscribe((m) => {
+      if(m) {
+        const file = ko.unwrap(this.imageProcessor.processedImage);
+        const image = new Image();
+        image.onload = () => {
+          this.context.drawImage(image, 0, 0, this.contextSize.width, this.contextSize.height);
+        };
+        image.src = URL.createObjectURL(file);
+      }
+    });
+  }
+
+  private subscribeToGrayscale() {
+    this.imageProcessor.onGrayscaleImageProcessed$.subscribe((m) => {
+      if(m) {
+        const file = ko.unwrap(this.imageProcessor.processedGrayscaleImage);
+
+      }
+    });
+  }
+
+  private initializeCanvas() {
+    const element = ko.unwrap(this.element);
+    this.height(element.width);
+    this.contextSize = {
+      width: element.width,
+      height: element.height
+    }
+    this.context = element.getContext("2d");
+    this.drawEmptyCanvas();
+  }
+
+  private drawEmptyCanvas() {
+    // TODO (FK): Render transparent mesh here.
+    this.context.fillStyle = "#989898";
+    this.context.fillRect(0, 0, this.contextSize.width, this.contextSize.height);
+  }
+
+}
+
+export const ThumbnailComponentDescriptor = new ComponentDescriptor(
+  "ascii-thumbnail",
+  ThumbnailComponent,
+  require("./thumbnail.component.html"),
+  require("./thumbnail.component.scss")
+);

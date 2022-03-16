@@ -1,11 +1,17 @@
 import * as ko from "knockout";
 import { AppModule } from "./app/app.module";
 import { ComponentDescriptor } from "./core/component";
+import { applyExternals } from "./core/ko.externals";
 
 const cssAppended: string[] = [];
 
 export function bootstrap() {
+  initializeKo();
   bootstrapComponents();
+}
+
+function initializeKo() {
+  applyExternals();
 }
 
 function bootstrapComponents() {
@@ -29,7 +35,7 @@ function applyCss(name: string, url: string) {
   const cssName = `component-css_${name}`;
   if(cssAppended.includes(cssName)) return;
   const link = createCssLink(url);
-  document.head.appendChild(link);
+  // document.head.appendChild(link);
 }
 
 function createCssLink(url: string) {

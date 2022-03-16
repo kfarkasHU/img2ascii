@@ -1,0 +1,8 @@
+<input
+  type="file"
+  class="uploader"
+  data-bind="
+    attr: { accept: allowedFileTypes },
+    event: { change: function() { imageSelected($element.files[0]) } }
+  "
+>
