@@ -46,7 +46,7 @@ class ThumbnailComponent {
     this.imageProcessor.onGrayscaleImageProcessed$.subscribe((m) => {
       if(m) {
         const pixels = ko.unwrap(this.imageProcessor.processedGrayscaleImage);
-
+        this.renderPixels(pixels);
       }
     });
   }

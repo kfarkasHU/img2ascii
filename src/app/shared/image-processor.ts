@@ -18,6 +18,7 @@ export class ImageProcessor {
   public async processImage(file: File) {
     await this._image.wrapFileAsImage(file);
     this.readRawImage();
+    this.readGrayscaleImage();
   }
 
   public onImageProcessed$ = ko.observable<boolean>();
@@ -38,9 +39,25 @@ export class ImageProcessor {
     this.onRawProcessingCompleted(imageData);
   }
 
+  private readGrayscaleImage() {
+    const imageData: Pixel[] = [];
+    for(let y = 0; y < this._image.imageSize.height; y++) {
+      for(let x = 0; x < this._image.imageSize.width; x++) {
+        const data = this._image.getPixel(x, y);
+        imageData.push(Pixel.createFrom(data));
+      }
+    }
+    this.onGrayscaleProcessingCompleted(imageData);
+  }
+
   private onRawProcessingCompleted(data: ReadonlyArray<Pixel>) {
     this.processedImage(data);
     this.onImageProcessed$(true);
+  }
+
+  private onGrayscaleProcessingCompleted(data: ReadonlyArray<Pixel>) {
+    this.processedGrayscaleImage(data);
+    this.onGrayscaleImageProcessed$(true);
   }
 
 }
