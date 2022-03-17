@@ -1,6 +1,7 @@
 import * as ko from "knockout";
 import { ComponentDescriptor } from "../../../../core/component";
 import { ImageProcessor } from "../../../shared/image-processor";
+import { Pixel } from "../../../shared/pixel";
 
 interface ThumbnailComponentInput {
   label: string,
@@ -20,7 +21,10 @@ class ThumbnailComponent {
   constructor(params: Partial<ThumbnailComponentInput>) {
     this.label(params.label);
     this.subscribeToImage(params.isGrayscale);
-    this.element.subscribe(() => this.initializeCanvas());
+    this.element.subscribe(() => {
+      this.initializeCanvas();
+      this.imageProcessor.setScale(this.height())
+    });      
   }
   
   private subscribeToImage(isGrayscale: boolean) {
@@ -30,14 +34,10 @@ class ThumbnailComponent {
   }
 
   private subscribeToRaw() {
-    this.imageProcessor.onImageProcessed$.subscribe((m) => {
-      if(m) {
-        const file = ko.unwrap(this.imageProcessor.processedImage);
-        const image = new Image();
-        image.onload = () => {
-          this.context.drawImage(image, 0, 0, this.contextSize.width, this.contextSize.height);
-        };
-        image.src = URL.createObjectURL(file);
+    this.imageProcessor.onImageProcessed$.subscribe(state => {
+      if(state) {
+        const pixels = ko.unwrap(this.imageProcessor.processedImage);
+        this.renderPixels(pixels);
       }
     });
   }
@@ -45,10 +45,23 @@ class ThumbnailComponent {
   private subscribeToGrayscale() {
     this.imageProcessor.onGrayscaleImageProcessed$.subscribe((m) => {
       if(m) {
-        const file = ko.unwrap(this.imageProcessor.processedGrayscaleImage);
+        const pixels = ko.unwrap(this.imageProcessor.processedGrayscaleImage);
 
       }
     });
+  }
+
+  private renderPixels(pixels: ReadonlyArray<Pixel>) {
+    const width = this.height();
+    const height = this.height();
+    for(let y = 0; y < height; y++) {
+      for(let x = 0; x < width; x++) {
+        const index = y * width + x;
+        const pixel = pixels[index];
+        this.context.fillStyle = `rgba(${pixel.red}, ${pixel.green}, ${pixel.blue}, 1)`;
+        this.context.fillRect(x, y, 1, 1);
+      }
+    }
   }
 
   private initializeCanvas() {
