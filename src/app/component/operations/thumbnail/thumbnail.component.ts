@@ -58,7 +58,7 @@ class ThumbnailComponent {
       for(let x = 0; x < width; x++) {
         const index = y * width + x;
         const pixel = pixels[index];
-        this.context.fillStyle = `rgba(${pixel.red}, ${pixel.green}, ${pixel.blue}, 1)`;
+        this.context.fillStyle = `rgba(${pixel.red}, ${pixel.green}, ${pixel.blue}, ${pixel.alpha})`;
         this.context.fillRect(x, y, 1, 1);
       }
     }
